@@ -131,6 +131,7 @@ dmypy.json
 
 #word
 ~*
+.~*
 # clion
 cmake-build-debug/
 bin/
