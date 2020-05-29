@@ -46,6 +46,7 @@ typedef struct {
 
 static double *fixparam(SEXP p, int *n)
 {
+    //x = fixparam(CAR(args), &n);
     double *x;
     int i;
 
@@ -398,7 +399,7 @@ SEXP nlm(SEXP call, SEXP op, SEXP args, SEXP rho)
 
 
 /* .Internal(
- *	nlm(function(x) f(x, ...), p, hessian, typsize, fscale,
+ *	nlm(function(x) f(x, ...), p=theta, hessian, typsize, fscale,
  *	    msg, ndigit, gradtol, stepmax, steptol, iterlim)
  */
     function_info *state;
@@ -419,7 +420,9 @@ SEXP nlm(SEXP call, SEXP op, SEXP args, SEXP rho)
     state = (function_info *) R_alloc(1, sizeof(function_info));
 
     /* the function to be minimized */
-
+    // in gammamixEM.R call nlm(gamma.ll, p = theta, lambda = lambda.hat, k = k, z = z)
+    //function(x) f(x, ...), where ... is
+    // lambda = lambda.hat, k = k, z = z
     v = CAR(args);
     if (!isFunction(v))
         error(_("attempt to minimize non-function"));
@@ -606,13 +609,16 @@ SEXP nlm(SEXP call, SEXP op, SEXP args, SEXP rho)
     k = 0;
 
     SET_STRING_ELT(names, k, mkChar("minimum"));
-    SET_VECTOR_ELT(value, k, ScalarReal(fpls));
+    SET_VECTOR_ELT(value, k, ScalarReal(fpls));         //double: should return to python-end
     k++;
 
-    SET_STRING_ELT(names, k, mkChar("estimate"));
+    //out$estimate
+    SET_STRING_ELT(names, k, mkChar("estimate"));      //array[1-by-2k]: must return to python-end
     SET_VECTOR_ELT(value, k, allocVector(REALSXP, n));
+
+    //xpls = (double*)R_alloc(n, sizeof(double));   //the memory of the return values is allocated in C-end
     for (i = 0; i < n; i++)
-        REAL(VECTOR_ELT(value, k))[i] = xpls[i];
+        REAL(VECTOR_ELT(value, k))[i] = xpls[i];  //xpls(n)	    <--> on exit:  xpls is local minimum
     k++;
 
     SET_STRING_ELT(names, k, mkChar("gradient"));
@@ -631,13 +637,13 @@ SEXP nlm(SEXP call, SEXP op, SEXP args, SEXP rho)
 
     SET_STRING_ELT(names, k, mkChar("code"));
     SET_VECTOR_ELT(value, k, allocVector(INTSXP, 1));
-    INTEGER(VECTOR_ELT(value, k))[0] = code;
+    INTEGER(VECTOR_ELT(value, k))[0] = code;        //should return to python-end
     k++;
 
     /* added by Jim K Lindsey */
     SET_STRING_ELT(names, k, mkChar("iterations"));
     SET_VECTOR_ELT(value, k, allocVector(INTSXP, 1));
-    INTEGER(VECTOR_ELT(value, k))[0] = itncnt;
+    INTEGER(VECTOR_ELT(value, k))[0] = itncnt;     //should return to python-end
     k++;
 
     setAttrib(value, R_NamesSymbol, names);

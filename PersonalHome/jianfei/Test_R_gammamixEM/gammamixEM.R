@@ -40,7 +40,6 @@ gammamixEM <-
         # # define dgamma		Rf_dgamma
         # https://github.com/coatless/Rmath/blob/master/dgamma.c
         # https://cran.r-project.org/doc/manuals/r-devel/R-admin.html#The-standalone-Rmath-library
-
 	  }
       # Debug> temp
       #               [,1]         [,2]          [,3]
@@ -156,6 +155,9 @@ gammamixEM <-
       # gamma.ll <- function(theta, z, lambda, k) -sum(z * log(dens(lambda, theta, k)))
       # element-wise product between z and log(dens(lambda, theta, k)), result is 600-by-3
       if (class(out) == "try-error") {
+        # The value of the expression if expr is evaluated without error,
+        # but an invisible object of class "try-error" containing the error message,
+        # and the error condition as the "condition" attribute, if it fails.
         cat("Note: Choosing new starting values.", "\n")
         if (mr == maxrestarts) stop(paste("Try different number of components?", "\n"))
         mr <- mr + 1
