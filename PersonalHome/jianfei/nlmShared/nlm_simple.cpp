@@ -4,12 +4,12 @@
 
 #include <stdio.h>
 
-typedef void (*LossFunType)(double *, double *, int);
-// void LossFun(double *xInit, double *xOutputSolution, int n)
-// void gamma_ll(double *thetaInit, double * thetaSolution, int n)  c-end callback python-end, where
+typedef void (*LossFunType)(double *, int);
+// void LossFun(double *xInit, int n)
+// void gamma_ll(double *thetaInit, int n)  c-end callback python-end, where
 //theta is double [n],
 
-void nlmSimple(LossFunType f, double* xInit, double* xOutput, int n) {
+void nlm_simple(LossFunType f, double* xInit, double* xOutput, int n) {
 
     //print input initial data
     int i=0;
@@ -23,5 +23,5 @@ void nlmSimple(LossFunType f, double* xInit, double* xOutput, int n) {
         xOutput[i] = i;           //toy solution
     }
 
-    (*f)(xInit, xOutput, n);
+    (*f)(xInit, n);
 }

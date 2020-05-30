@@ -13,3 +13,5 @@ add_library(nlmShared SHARED r_nlm.c
         include/R_ext/RS.h
         statsR.h
         stats.h)
+
+add_library(nlm_simple SHARED nlm_simple.cpp)
