@@ -5,11 +5,11 @@
 #include <stdio.h>
 #include "nlm_simple.h"
 
-//typedef double (*LossFunType)(void* objectPointer);
-//double nlm_simple(LossFunType f, void* objectPointer, double* xInit,
+//typedef double (*LossFunType)(double *xOutput, unsigned long n);
+//double nlm_simple(LossFunType f, double* xInit,
 //        unsigned long n, double* xOutput, int* code, int* iterCount);
 
-double nlm_simple(LossFunType f, void* objectPointer, double* xInit,
+double nlm_simple(LossFunType f, double* xInit,
         unsigned long n, double* xOutput, int* code, int* iterCount) {
 //return function value at the point xOutput
 
@@ -28,7 +28,7 @@ double nlm_simple(LossFunType f, void* objectPointer, double* xInit,
     *code = 11;
     *iterCount = 10;
 
-    double loss = (*f)(objectPointer);
+    double loss = (*f)(xOutput, n);
     printf("nlm_simple.so: python loss is %f \n", loss);
 
     return loss;

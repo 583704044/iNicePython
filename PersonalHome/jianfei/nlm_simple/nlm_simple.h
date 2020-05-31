@@ -9,8 +9,8 @@
 extern "C"
 {
 #endif
-typedef double (*LossFunType)(void* objectPointer);
-double nlm_simple(LossFunType f, void* objectPointer, double* xInit,
+typedef double (*LossFunType)(double *xOutput, unsigned long n);
+double nlm_simple(LossFunType f, double* xInit,
         unsigned long n, double* xOutput, int* code, int* iterCount);
 
 #ifdef __cplusplus
