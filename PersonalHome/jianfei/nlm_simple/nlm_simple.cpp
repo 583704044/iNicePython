@@ -7,7 +7,7 @@
 
 //typedef double (*LossFunType)(double *xOutput, unsigned long n);
 //double nlm_simple(LossFunType f, double* xInit,
-//        unsigned long n, double* xOutput, int* code, int* iterCount);
+//       unsigned long n, double* xOutput, int* code, int* iterCount);
 
 double nlm_simple(LossFunType f, double* xInit,
         unsigned long n, double* xOutput, int* code, int* iterCount) {
@@ -22,11 +22,11 @@ double nlm_simple(LossFunType f, double* xInit,
     //test if we can call into the python-end with toy data
     i=0;
     for(; i<n; ++i) {
-        xOutput[i] = i;           //toy solution
+        xOutput[i] = 1000 + i;           //toy solution
     }
 
-    *code = 11;
-    *iterCount = 10;
+    *code = 111;
+    *iterCount = 101;
 
     double loss = (*f)(xOutput, n);
     printf("nlm_simple.so: python loss is %f \n", loss);
