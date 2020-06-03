@@ -59,9 +59,18 @@ class nlmMinimizer:
     def show(self):
         print('xInit =', self.xInit)
         print('xOuput = ', self.xOuput)
-        print('code =', self.code)
-        print('iterCount =', self.iterCount)
+        print('code =', self.code.value)
+        print('iterCount =', self.iterCount.value)
         print('retValue = ', self.retValue)
+
+    def getXSolution(self):
+        return self.xOuput
+
+    def getRetValue(self):
+        return self.retValue
+
+    def getIterCount(self):
+        return self.iterCount.value
 
 
     @staticmethod
