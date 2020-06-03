@@ -397,11 +397,11 @@ SEXP nlm(SEXP call, SEXP op, SEXP args, SEXP rho)
     int code, i, j, k, itnlim, method, iexp, omsg, msg,
             n, ndigit, iagflg, iahflg, want_hessian, itncnt;
 
-
 /* .Internal(
  *	nlm(function(x) f(x, ...), p=theta, hessian, typsize, fscale,
  *	    msg, ndigit, gradtol, stepmax, steptol, iterlim)
  */
+
     function_info *state;
 
     args = CDR(args);

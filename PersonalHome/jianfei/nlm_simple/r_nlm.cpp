@@ -21,54 +21,9 @@
 #define _(String) (String)
 #endif
 
-#include "nlm_simple.h"
-
-/* General Nonlinear Optimization */
-
-#define FT_SIZE 5		/* default size of table to store computed function values */
-typedef struct {
-    double   fval;
-    double  *x;      //vector of size=n
-    double  *grad;   //vector of size=n
-    double  *hess;   //vector of size = n * n
-} ftable;
 
 
-typedef struct {
-//typedef double (*LossFunType)(double *xOutput, unsigned long n);
-    LossFunType fcall;	      /* unevaluated call to R function */
-//    SEXP R_env;	      /* where to evaluate the calls */
-//    int have_gradient;
-//    int have_hessian;
-/*  int n;	      -* length of the parameter (x) vector */
-    int FT_size;	      /* size of table to store computed function values */
-    int FT_last;	      /* Newest entry in the table */
-    ftable *Ftable;
-} function_info;
 
-/* allocate the storage in the table of computed function values */
-static void FT_init(int n, int FT_size, function_info *state) {
-    int i, j;
-    ftable *Ftable;
-
-    Ftable = new ftable[FT_size];
-    for (i = 0; i < FT_size; i++) {
-        //Ftable[i].x = (double *)R_alloc(n, sizeof(double));   //x[n] in f(x)
-        Ftable[i].x = new double[n];
-        for (j = 0; j < n; j++) {
-            Ftable[i].x[j] = DBL_MAX; /* initialize to unlikely parameter values float.h*/
-        }
-        if (have_gradient) {
-            Ftable[i].grad = (double *)R_alloc(n, sizeof(double));
-            if (have_hessian) {
-                Ftable[i].hess = (double *)R_alloc(n * n, sizeof(double));
-            }
-        }
-    }
-    state->Ftable = Ftable;
-    state->FT_size = FT_size;
-    state->FT_last = -1;
-}
 
 /* Fatal errors - we don't deliver an answer */
 
@@ -337,8 +292,6 @@ SEXP nlm(SEXP call, SEXP op, SEXP args, SEXP rho)
  */
     function_info *state;
 
-    args = CDR(args);
-    PrintDefaults();
 
     //typedef struct {
     //    SEXP R_fcall;	      /* unevaluated call to R function */  PROTECT(state->R_fcall = lang2(v, R_NilValue));
