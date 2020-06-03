@@ -3,4 +3,4 @@ project(nlm_simple)
 
 set(CMAKE_CXX_STANDARD 98)
 
-add_library(nlm_simple SHARED nlm_simple.cpp nlm_simple.h FunctionInfo.cpp FunctionInfo.h)
+add_library(nlm_simple SHARED nlm_simple.cpp nlm_simple.h FunctionInfo.cpp FunctionInfo.h NonLinearMinizer.cpp NonLinearMinizer.h)
