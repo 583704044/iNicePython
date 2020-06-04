@@ -9,14 +9,14 @@
 
 /* General Nonlinear Optimization */
 
-class FTable {
+class FunEntry {
 public:
     double  fval;
     double  *x;      //vector of size=n
 
-    FTable();
-    ~FTable();
-    void createX(int n);
+    FunEntry();
+    ~FunEntry();
+    void copy(double* x1, int n);
 };
 
 class FunctionInfo {
@@ -24,15 +24,17 @@ private:
     LossFunType fcall;	  //typedef double (*LossFunType)(double *xOutput, unsigned long n);
     int n;	              // length of the parameter (x) vector
 
-    int FT_size;	      /* size of table to store computed function values */
-    int FT_last;	      /* Newest entry in the table */
-    FTable *pftable;
+    int tableCapacity;	      /* size of table to store computed function values */
+    int num;	              /* number of entries in the table */
+    FunEntry *ptable;
 
 public:
     FunctionInfo(LossFunType lossFunCallBack, int n);
     ~FunctionInfo();
 
     void createFTable(int FT_size=5);
+    int lookup(const double *x);
+    void store(double fval, const double *x);
 
 };
 
