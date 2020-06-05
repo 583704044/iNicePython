@@ -777,7 +777,7 @@ dog_1step(int nr, int n, double *g, double *a, double *p, double *sx,
     double alam, bet, alpha, tmp, dot1, dot2;
 
     /*	can we take newton step */
-    *nwtake = (rnwtln <= *dlt);
+    *nwtake = (Rboolean) (rnwtln <= *dlt);
 
     if (*nwtake) {
 	for (i = 0; i < n; ++i)
@@ -946,7 +946,7 @@ hook_1step(int nr, int n, double *g, double *a, double *udiag, double *p,
     /*	 change here if other values are to be substituted. */
 
     /*	shall we take newton step ? */
-    *nwtake = (rnwtln <= hi * *dlt);
+    *nwtake = (Rboolean)(rnwtln <= hi * *dlt);
 
     if (*nwtake) { /*	take newton step */
 	for (i = 0; i < n; ++i)
@@ -1187,7 +1187,7 @@ secunf(int nr, int n, double *x, double *g, double *a, double *udiag,
 	    a[i + j * nr] = a[j + i * nr];
     }
 
-    *noupdt = (itncnt == 1);
+    *noupdt = (Rboolean) (itncnt == 1);
 
     for (i = 0; i < n; ++i) {
 	s[i] = xpls[i] - x[i];
@@ -1271,7 +1271,7 @@ secfac(int nr, int n, double *x, double *g, double *a, double *xpls,
     double snorm2, reltol;
     double alp, den1, den2;
 
-    *noupdt = (itncnt == 1);
+    *noupdt = (Rboolean)(itncnt == 1);
 
     for (i = 0; i < n; ++i) {
 	s[i] = xpls[i] - x[i];
@@ -1311,7 +1311,7 @@ secfac(int nr, int n, double *x, double *g, double *a, double *xpls,
 
     skpupd = TRUE;
     for (i = 0; i < n; ++i) {
-	skpupd = (fabs(y[i] - w[i]) <
+	skpupd = (Rboolean)(fabs(y[i] - w[i]) <
 		  reltol * fmax2(fabs(g[i]), fabs(gpls[i])));
 	if(!skpupd)
 	    break;

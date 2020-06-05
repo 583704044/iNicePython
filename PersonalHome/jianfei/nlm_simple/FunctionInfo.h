@@ -20,20 +20,19 @@ public:
 };
 
 class FunctionInfo {
-private:
+public:
     LossFunType fcall;	  //typedef double (*LossFunType)(double *xOutput, unsigned long n);
     int n;	              // length of the parameter (x) vector
 
     int tableCapacity;	      /* size of table to store computed function values */
-    int num;	              /* number of entries in the table */
+    int last;	              /* the last valid element index in ptable */
     FunEntry *ptable;
 
 public:
-    FunctionInfo(LossFunType lossFunCallBack, int n);
+    FunctionInfo(LossFunType lossFunCallBack, int n, int tableCapacity);
     ~FunctionInfo();
 
-    void createFTable(int FT_size=5);
-    int lookup(const double *x);
+    int lookup(const double *x, double* fval);
     void store(double fval, const double *x);
 
 };

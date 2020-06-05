@@ -244,12 +244,6 @@ static int FT_lookup(int n, const double *x, function_info *state)
             matched = 1;
             for (j = 0; j < n; j++) {
                 if (x[j] != ftx[j]) {       //yjf.WARNING:  equal in double?
-                    // typedef struct {
-                    //    double   fval;
-                    //    double  *x;      //vector of size=n
-                    //    double  *grad;   //vector of size=n
-                    //    double  *hess;   //vector of size = n * n
-                    //} ftable;
                     matched = 0;            //check whether the new input x is the cache of ftx
                     break;
                 }

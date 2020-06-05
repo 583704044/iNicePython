@@ -31,39 +31,26 @@ void FunEntry::copy(double *x1, int n) {
     memcpy(x, x1, n * sizeof(double));
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//class FunctionInfo {
-//private:
 //    LossFunType fcall;	  //typedef double (*LossFunType)(double *xOutput, unsigned long n);
 //    int n;	              // length of the parameter (x) vector
+//
+//    int tableCapacity;	      /* size of table to store computed function values */
+//    int num;	              /* number of entries in the table */
+//    FunEntry *ptable;
 
-//    int FT_size;	      /* size of table to store computed function values */
-//    int FT_last;	      /* Newest entry in the table */
-//    FunEntry *pftable;
-
-FunctionInfo::FunctionInfo(LossFunType lossFunCallBack, int n) {
+FunctionInfo::FunctionInfo(LossFunType lossFunCallBack, int n, int tableCapacity) {
     fcall = lossFunCallBack;
     this->n = n;
-
-    FT_size = 0;
-    FT_last = -1;
-    pftable = 0;
+    this->tableCapacity = tableCapacity;
+    last = -1;
+    ptable = new FunEntry[tableCapacity];
 }
 FunctionInfo::~FunctionInfo() {
-
-    if (pftable) {
-        cout << "FunctionInfo.pftable= " << pftable << " dctor invoked" << endl;
-        delete[] pftable;
-        pftable = 0;
+    if (ptable) {
+        cout << "FunctionInfo.pftable= " << ptable << " dctor invoked" << endl;
+        delete[] ptable;
+        ptable = 0;
     }
-}
-
-
-
-void FunctionInfo::createFTable(int FT_size/*=5*/) {
-    this->FT_size = FT_size;
-
-    this->pftable= new FunEntry[FT_size];
-    FT_last = -1;
 }
 
 //    int n;	          // length of the parameter (x) vector
@@ -71,28 +58,36 @@ void FunctionInfo::createFTable(int FT_size/*=5*/) {
 //    int FT_size;	      /* size of table to store computed function values */
 //    int FT_last;	      /* Newest entry in the table */
 //    FunEntry *pftable;
-int FunctionInfo::lookup(const double *x) {
+int FunctionInfo::lookup(const double *x, double* fval) {
+    if (last < 0) {
+        return -1;  //the loop-queue is empty
+    }
 
     double *ftx;
-    int ind, j;
-    for (int i = 0; i < FT_size; i++) {
-        ind = (FT_last - i) % FT_size;
-        /* why can't they define modulus correctly */
-        if (ind < 0) ind += FT_size;
+    int j;
 
-        ftx = pftable[ind].x;
-        if (!ftx) continue;
+    int p = last;
+    for(int i=0; i<tableCapacity && ptable[p].x; ++i) {
+        ftx = ptable[p].x;
 
         for(j=0; j<n && x[j]==ftx[j]; ++j);
-        if (j>=n) return ind;
+        if (j>=n) {
+            *fval = ptable[p].fval;
+            return p;
+        }
+
+        --p;
+        if (p < 0) p += tableCapacity;
     }
     return -1;
 }
 
 /* Store an entry in the table of computed function values */
 void FunctionInfo::store(double fval, const double *x) {
-    int ind = (++(FT_last)) % FT_size;   //keep max 5 caches.
+    ++last;
+    if (last >= tableCapacity)
+        last = 0;               //keep max 5 caches.
 
-    pftable[ind].fval = fval;
-    memcpy(pftable[ind].x, x, n * sizeof(double));
+    ptable[last].fval = fval;
+    memcpy(ptable[last].x, x, n * sizeof(double));
 }

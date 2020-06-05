@@ -4,7 +4,11 @@
 
 #include "nlm_simple.h"
 #include "FunctionInfo.h"
+#include "uncmin.h"
+
 #include <iostream>
+#include <float.h>          //DBL_MAX
+#include <math.h>           //<math.h> c99
 using namespace std;
 
 
@@ -88,68 +92,33 @@ static void opterror(int nerr)
     }
 }
 
-static void fcn(int n, const double x[], double *f, FunctionInfo *state) {
-    SEXP s, R_fcall;
-    ftable *Ftable;
-    double *g = (double *) 0, *h = (double *) 0;
-    int i;
+//typedef void (*fcn_p)(int, double *, double *, void *);
+static void fcn(int n, const double x[], double *fval, FunctionInfo *state) {
 
-    R_fcall = state->R_fcall;
-    Ftable = state->Ftable;
-    if ((i = FT_lookup(n, x, state)) >= 0) {
-        *f = Ftable[i].fval;                    //found f's value in the cache
-        return;
-    }
-    /* calculate for a new value of x */
-    s = allocVector(REALSXP, n);
-    SETCADR(R_fcall, s);
-    for (i = 0; i < n; i++) {
-        //check if the searching-point x is finite value
-        if (!R_FINITE(x[i])) error(_("non-finite value supplied by 'nlm'"));
-        REAL(s)[i] = x[i];
-    }
-
-    //run the objective function R_fcall stored in state object
-    //R_fcall will also compute gradient/hessian if analysis-gradient/hessian are provided
-    s = PROTECT(eval(state->R_fcall, state->R_env));
-
-    switch(TYPEOF(s)) {
-        case INTSXP:
-            if (length(s) != 1) goto badvalue;
-            if (INTEGER(s)[0] == NA_INTEGER) {
-                warning(_("NA replaced by maximum positive value"));
-                *f = DBL_MAX;   //check the overflow of returned integer
-            }
-            else *f = INTEGER(s)[0];
-            break;
-        case REALSXP:
-            if (length(s) != 1) goto badvalue;
-            if (!R_FINITE(REAL(s)[0])) {
-                warning(_("NA/Inf replaced by maximum positive value"));
-                *f = DBL_MAX; //check the overflow of returned real
-            }
-            else *f = REAL(s)[0];
-            break;
-        default:
-            goto badvalue;
-    }
-    if (state->have_gradient) {
-        //get the analysis-gradient attribute-value in the evaluation of R_fcall
-        g = REAL(PROTECT(coerceVector(getAttrib(s, install("gradient")), REALSXP)));
-
-        if (state->have_hessian) {
-            h = REAL(PROTECT(coerceVector(getAttrib(s, install("hessian")), REALSXP)));
+    //check if the searching-point x is finite value
+    for (int i = 0; i < n; i++) {
+        if (!isfinite(x[i])) {
+            throw overflow_error("ERROR: non-finite value supplied by 'nlm'");
         }
     }
 
-    FT_store(n, *f, x, g, h, state);
+    //Has x been accessed before?
+    if (state->lookup(x, fval) >= 0) {
+        //found f's value in the cache, return it in fval
+        return;
+    }
 
+    //double (*LossFunType)(const double *xOutput, unsigned long n);
+    LossFunType f = state->fcall;
+    double res = (*f)(x, n);
+    if (!isfinite(res)) {
+        cout << "WARNING: NA/Inf replaced by maximum positive value: " << res << endl;
+        res = DBL_MAX;
+    }
+    *fval = res;
 
-    UNPROTECT(1 + state->have_gradient + state->have_hessian);
-    return;
-
-    badvalue:
-    error(_("invalid function value in 'nlm' optimizer"));
+    //store the result of this call
+    state->store(res, x);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -191,9 +160,8 @@ double nlm_simple(LossFunType f, double* xInit,
 
     //
     // state
-    //
-    FunctionInfo state(f, n);
-    state.createFTable(FT_SIZE);
+    //FunctionInfo(LossFunType lossFunCallBack, int n, int tableCapacity);
+    FunctionInfo state(f, n, FT_SIZE);
 
     /* Plug in the call to the optimizer here */
 
@@ -229,7 +197,7 @@ double nlm_simple(LossFunType f, double* xInit,
      *	 I think we always check gradients and hessians
      */
 
-    optif9(n, n, xInit, (fcn_p) fcn, (fcn_p) Cd1fcn, (d2fcn_p) Cd2fcn,
+    optif9(n, n, xInit, (fcn_p) fcn, (fcn_p) 0, (d2fcn_p) 0,
            &state, c_typsize, c_fscale, method, iexp, &msg, c_ndigit, c_iterlim,
            iagflg, iahflg, dlt, c_gradtol, c_stepmax, c_steptol, xOutput, &fpls,
            gpls, resultCode, a, wrk, iterCount);
