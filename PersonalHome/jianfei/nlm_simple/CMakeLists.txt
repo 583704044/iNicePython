@@ -6,4 +6,6 @@ set(CMAKE_CXX_STANDARD 98)
 include_directories(include)
 include_directories(include/R_ext)
 
-add_library(nlm_simple SHARED nlm_simple.cpp uncmin.cpp FunctionInfo.cpp)
+#add_library(nlm_simple SHARED nlm_simple.cpp uncmin.cpp FunctionInfo.cpp nlm_tester.cpp nlm_tester.h)
+
+add_executable(nlm_tester.cpp nlm_simple.cpp uncmin.cpp FunctionInfo.cpp nlm_tester.cpp nlm_tester.h)
