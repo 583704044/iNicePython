@@ -34,7 +34,10 @@ class nlmMinimizer:
         s = sum( xs ** 2)
         self.c_stepmax = max(1000.0 * math.sqrt(s), 1000)
 
+        print('DEB: ..start.lib.CDLL')
         lib = ctypes.CDLL("./libnlm_simple.so")
+        print('DEB: ...lib.CDLL')
+
         self.fun = lib.nlm_simple
         self.fun.restype = ctypes.c_double
         self.callBackType = ctypes.CFUNCTYPE(ctypes.c_double,
@@ -83,6 +86,7 @@ class nlmMinimizer:
         #         int c_iterlim, bool c_check_analyticals);
         cb = self.callBackType (nlmMinimizer.loss)
         self.retValue = None
+        print('DEB: starting call self.fun....')
         try:
             self.retValue = self.fun(cb,
                                      self.xInit,
@@ -99,6 +103,8 @@ class nlmMinimizer:
                                      self.c_steptol,
                                      self.c_iterlim,
                                      self.c_check_analyticals)
+
+            print('DEG: end of calling self.fun...retVal=',self.retValue)
             return True, self.retValue
         except Exception as e:
             print('nlm_simple throw an exception: ', e)

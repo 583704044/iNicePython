@@ -130,6 +130,8 @@ double nlm_simple(LossFunType f, double* xInit,
         int c_iterlim, bool c_check_analyticals) {
 //return function value at the point xOutput
 
+    cout << "DEB:...enter nlm_simple..." << endl;
+
     //
     //msg
     //
@@ -196,6 +198,8 @@ double nlm_simple(LossFunType f, double* xInit,
      *	 Using msg=9 is absolutely minimal
      *	 I think we always check gradients and hessians
      */
+
+
 
     optif9(n, n, xInit, (fcn_p) fcn, (fcn_p) 0, (d2fcn_p) 0,
            &state, c_typsize, c_fscale, method, iexp, &msg, c_ndigit, c_iterlim,

@@ -1,11 +1,9 @@
 cmake_minimum_required(VERSION 3.12)
 project(nlm_simple)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 98)
 
 include_directories(include)
 include_directories(include/R_ext)
 
-add_library(nlm_simple SHARED nlm_simple.cpp nlm_simple.h FunctionInfo.cpp FunctionInfo.h uncmin.cpp uncmin.h)
-
-add_library(uncmin STATIC uncmin.cpp)
+add_library(nlm_simple SHARED nlm_simple.cpp uncmin.cpp FunctionInfo.cpp)
