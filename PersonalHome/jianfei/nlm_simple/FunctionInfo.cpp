@@ -19,12 +19,13 @@ FunEntry::FunEntry() {
 }
 FunEntry::~FunEntry(){
     if (x) {
-        cout << "FunEntry.x= " << x << " dctor invoked" << endl;
+//        cout << "FunEntry.x= " << x << " dctor invoked" << endl;
         delete[] x;
         x = 0;
     }
 }
-void FunEntry::copy(double *x1, int n) {
+void FunEntry::copy(double fvalue, const double *x1, int n) {
+    fval = fvalue;
     if (!x) {
         x = new double[n];
     }
@@ -47,7 +48,7 @@ FunctionInfo::FunctionInfo(LossFunType lossFunCallBack, int n, int tableCapacity
 }
 FunctionInfo::~FunctionInfo() {
     if (ptable) {
-        cout << "FunctionInfo.pftable= " << ptable << " dctor invoked" << endl;
+//        cout << "FunctionInfo.pftable= " << ptable << " dctor invoked" << endl;
         delete[] ptable;
         ptable = 0;
     }
@@ -88,6 +89,7 @@ void FunctionInfo::store(double fval, const double *x) {
     if (last >= tableCapacity)
         last = 0;               //keep max 5 caches.
 
-    ptable[last].fval = fval;
-    memcpy(ptable[last].x, x, n * sizeof(double));
+    ptable[last].copy(fval, x, n);
+
+//    memcpy(ptable[last].x, x, n * sizeof(double));
 }

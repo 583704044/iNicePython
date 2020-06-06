@@ -5,10 +5,14 @@
 #ifndef NLM_SIMPLE_UNCMIN_H
 #define NLM_SIMPLE_UNCMIN_H
 
+double fmax2(double x, double y);
+double fmin2(double x, double y);
+
 /* type of pointer to the target and gradient functions */
 typedef void (*fcn_p)(int, double *, double *, void *);
 /* type of pointer to the hessian functions */
 typedef void (*d2fcn_p)(int, int, double *, double *, void *);
+
 
 void optif9(int nr, int n, double *x, fcn_p fcn, fcn_p d1fcn, d2fcn_p d2fcn,
        void *state, double *typsiz, double fscale, int method,

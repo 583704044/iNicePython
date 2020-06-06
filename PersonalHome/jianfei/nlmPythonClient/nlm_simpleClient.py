@@ -23,7 +23,7 @@ class nlmMinimizer:
 
         self.c_typsize = np.ones(self.xInit.size, dtype=np.float64)
         self.c_fscale = 1.0
-        self.c_print_level = 0  # must be in {0,1,2}
+        self.c_print_level = 2  # must be in {0,1,2}
         self.c_ndigit = 12
         self.c_gradtol = 1e-06
         self.c_steptol = 1e-06
@@ -32,7 +32,7 @@ class nlmMinimizer:
         # c_stepmax = max(1000 * sqrt( sum((xInit/typsize)^2) ), 1000),
         xs = self.xInit / self.c_typsize
         s = sum( xs ** 2)
-        self.c_stepmax = max(1000.0 * math.sqrt(s), 1000)
+        self.c_stepmax = max(int(1000.0 * math.sqrt(s)), 1000)
 
         print('DEB: ..start.lib.CDLL')
         lib = ctypes.CDLL("./libnlm_simple.so")
@@ -60,21 +60,31 @@ class nlmMinimizer:
                         ctypes.c_bool # bool c_check_analyticals
                         ]
 
+        # void optcode(int code)
+        self.optcode = lib.optcode
+        self.optcode.argtypes = [ctypes.c_int]
+
     # typedef double (*LossFunType)(const double *xOutput, unsigned long n);
     @staticmethod
-    def loss(xOutput, n):
-        print('nlmMinimizer.xOutput: ', xOutput, 'n: ', n)
+    def loss(x, n):
+        print('nlmMinimizer.x: ', x, 'n: ', n)
 
-        lst = [xOutput[i] for i in range(n)]
-        for i in range(n):
-            print('xOutput['+str(i)+']: ', xOutput[i])
+        lst = [x[i] for i in range(n)]
+        # for i in range(n):
+        #     print('xOutput[' + str(i) +']: ', x[i])
 
         # xnp = np.ctypeslib.as_array(xOutput, shape=(n))
         # print('np.array from ndpointer: ', xnp)
-        xnp = np.array(lst)
-        print('np.array from ndpointer: ', xnp)
+        x = np.array(lst)
+        print('np.array from ndpointer: ', x)
 
-        return 2000
+        A = np.array([[5.0, 5.0], [5.0, 12.5]])  # A is positive definite matrix
+        b = np.array([2.0, 2.0])
+
+        loss = 0.5 * (A.dot(x)).dot(x) + b.dot(x)
+        # minimum value must be -0.4
+
+        return loss
 
 
     def __call__(self):
@@ -114,6 +124,8 @@ class nlmMinimizer:
         print('xInit =', self.xInit)
         print('xOuput = ', self.xOuput)
         print('code =', self.code.value)
+        self.optcode(self.code)
+        
         print('iterCount =', self.iterCount.value)
         print('retValue = ', self.retValue)
 
@@ -129,7 +141,7 @@ class nlmMinimizer:
 
     @staticmethod
     def test():
-        m = nlmMinimizer(np.array([1.0,2,3,4]))
+        m = nlmMinimizer(np.array([1.0,2.0]))
         ok, retValue = m()
         print('m call: ok=', ok, 'retVal=', retValue)
         print('...........after call...........')

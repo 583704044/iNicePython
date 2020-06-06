@@ -8,7 +8,8 @@
 class nlm_tester {
 public:
     static void testSimple();
-    static double loss(const double *xOutput, unsigned long n);
+    static double loss(const double *x, unsigned long n);
+    static double lossMatrix(const double *x, unsigned long n);
 
 };
 

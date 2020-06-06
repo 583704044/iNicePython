@@ -9,6 +9,9 @@
 extern "C"
 {
 #endif
+
+void optcode(int code);
+
 typedef double (*LossFunType)(const double *xOutput, unsigned long n);
 
 double nlm_simple(LossFunType f, double* xInit,

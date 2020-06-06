@@ -16,7 +16,7 @@ public:
 
     FunEntry();
     ~FunEntry();
-    void copy(double* x1, int n);
+    void copy(double fvalue, const double* x1, int n);
 };
 
 class FunctionInfo {

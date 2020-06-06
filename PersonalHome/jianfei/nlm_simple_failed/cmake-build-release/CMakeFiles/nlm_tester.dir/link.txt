@@ -1,1 +1,0 @@
-/usr/bin/c++  -O3 -DNDEBUG   CMakeFiles/nlm_tester.dir/nlm_tester.cpp.o CMakeFiles/nlm_tester.dir/nlm_simple.cpp.o CMakeFiles/nlm_tester.dir/uncmin.cpp.o CMakeFiles/nlm_tester.dir/FunctionInfo.cpp.o CMakeFiles/nlm_tester.dir/fmax2.c.o CMakeFiles/nlm_tester.dir/fmin2.c.o  -o nlm_tester  -L/home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/lib 

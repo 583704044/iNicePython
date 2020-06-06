@@ -14,12 +14,12 @@ using namespace std;
 
 #define FT_SIZE 5		/* default size of table to store computed function values */
 
-static void optcode(int code)
+void optcode(int code)
 {
     switch(code) {
         case 1:
             cout << "Relative gradient close to zero.\n";
-            cout << "urrent iterate is probably solution.\n";
+            cout << "Current iterate is probably solution.\n";
             break;
         case 2:
             cout << "Successive iterates within tolerance.\n";
@@ -111,6 +111,9 @@ static void fcn(int n, const double x[], double *fval, FunctionInfo *state) {
     //double (*LossFunType)(const double *xOutput, unsigned long n);
     LossFunType f = state->fcall;
     double res = (*f)(x, n);
+
+//    cout << "DEB:...fcn..after call loss: retVal=" << res << endl;
+
     if (!isfinite(res)) {
         cout << "WARNING: NA/Inf replaced by maximum positive value: " << res << endl;
         res = DBL_MAX;
@@ -130,7 +133,7 @@ double nlm_simple(LossFunType f, double* xInit,
         int c_iterlim, bool c_check_analyticals) {
 //return function value at the point xOutput
 
-    cout << "DEB:...enter nlm_simple..." << endl;
+//    cout << "DEB:...enter nlm_simple..." << endl;
 
     //
     //msg
@@ -199,7 +202,7 @@ double nlm_simple(LossFunType f, double* xInit,
      *	 I think we always check gradients and hessians
      */
 
-
+//    cout << "DEB:...before enter optif9..." << endl;
 
     optif9(n, n, xInit, (fcn_p) fcn, (fcn_p) 0, (d2fcn_p) 0,
            &state, c_typsize, c_fscale, method, iexp, &msg, c_ndigit, c_iterlim,

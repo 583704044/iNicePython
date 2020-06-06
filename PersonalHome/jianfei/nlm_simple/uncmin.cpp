@@ -27,15 +27,17 @@
 
 /*--- The Dennis + Schnabel Minimizer -- used by R's  nlm() ---*/
 
+#include "uncmin.h"
+
 #include <math.h>
 #include <float.h> /* DBL_MAX */
-#include <R_ext/Applic.h>
 #include <R_ext/Boolean.h>
-#include <R_ext/Print.h>   /* Rprintf */
-#include <R_ext/PrtUtil.h> /* printRealVector */
 #include <R_ext/Linpack.h> /* ddot, dnrm2, dtrsl, dscal */
-#include <Rmath.h>
+#include <iostream>
+using namespace std;
+
 #define Rexp10(x) pow(10.0, x)
+
 
 /* CC	 subroutines  mvmlt[lsu] should be REPLACED by BLAS ones!
  * CC
@@ -2095,30 +2097,38 @@ prt_result(int nr, int n, const double x[], double f, const double g[],
  */
 
     /* Print iteration number */
-
-    Rprintf("iteration = %d\n", itncnt);
+	int i;
+    cout << "iteration = " << itncnt << endl;
 
     /* Print step */
 
     if (iflg != 0) {
-	Rprintf("Step:\n");
-	printRealVector((double *)p, n, 1);
+		cout << "Step:\n";
+		for(i=0; i<n; ++i) {
+			cout << p[i] << " ";
+		}
+		cout << endl;
     }
 
     /* Print current iterate */
 
-    Rprintf("Parameter:\n");
-    printRealVector((double *)x, n, 1);
+    cout << "Parameter:\n";
+	for(i=0; i<n; ++i) {
+		cout << x[i] << " ";
+	}
+	cout << endl;
 
     /* Print function value */
 
-    Rprintf("Function Value\n");
-    printRealVector((double *)&f, 1, 1);
+    cout << "Function Value = " << f << endl;
 
     /* Print gradient */
 
-    Rprintf("Gradient:\n");
-    printRealVector((double *)g, n, 1);
+    cout << "Gradient:\n";
+	for(i=0; i<n; ++i) {
+		cout << g[i] << " ";
+	}
+	cout << endl;
 
 #ifdef NEVER
     /*	Print Hessian */
@@ -2132,7 +2142,6 @@ prt_result(int nr, int n, const double x[], double f, const double g[],
     }
 #endif
 
-    Rprintf("\n");
 } /* prt_result */
 
 static void
@@ -2260,11 +2269,20 @@ optdrv(int nr, int n, double *x, fcn_p fcn, fcn_p d1fcn, d2fcn_p d2fcn,
 
     /*	evaluate fcn(x) */
 
+//    cout << "DEB: optdrv: call fcn.." << endl;
+//    for(i=0; i<n; ++i) {
+//    	cout << x[i] << " ";
+//    }
+//    cout << endl;
+
     (*fcn)(n, x, &f, state);
     // static void fcn(int n, const double x[], double *f, function_info *state)
+//	cout << "DEB: after optdrv: call fcn..retVal=" << f << endl;
 
     /*	evaluate analytic or finite difference gradient and
 	check analytic gradient, if requested. */
+
+
 
     if (!iagflg) {
 	fstofd(1, 1, n, x, (fcn_p)fcn, state, &f, g, sx, rnf, &wrk, 1);
@@ -2450,6 +2468,8 @@ optdrv(int nr, int n, double *x, fcn_p fcn, fcn_p d1fcn, d2fcn_p d2fcn,
 	}
     } /* END while(1) */
 
+//    cout << "DEB:..before optdrv_end..xpls: " << xpls << endl;
+
     optdrv_end(nr, n, xpls, x, gpls, g, fpls, f, a, p, *itncnt,
 	       *itrmcd, msg, prt_result);
 } /* optdrv */
@@ -2617,6 +2637,9 @@ optif9(int nr, int n, double *x, fcn_p fcn, fcn_p d1fcn, d2fcn_p d2fcn,
  *	wrk(n,8)     --> workspace
  *	itncnt	    <--> iteration count
  */
+
+  cout << "optif9..xpls: " << xpls << endl;
+
   optdrv(nr, n, x, (fcn_p)fcn, (fcn_p)d1fcn, (d2fcn_p)d2fcn, state,
 	 typsiz, fscale, method, iexp, msg, ndigit, itnlim, iagflg,
 	 iahflg, dlt, gradtl, stepmx, steptl, xpls, fpls, gpls,

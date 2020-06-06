@@ -1,1 +1,0 @@
-/usr/bin/c++  -O3 -DNDEBUG   CMakeFiles/nlm_tester.cpp.dir/nlm_simple.cpp.o CMakeFiles/nlm_tester.cpp.dir/uncmin.cpp.o CMakeFiles/nlm_tester.cpp.dir/FunctionInfo.cpp.o CMakeFiles/nlm_tester.cpp.dir/nlm_tester.cpp.o  -o nlm_tester.cpp 
