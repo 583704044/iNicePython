@@ -2638,8 +2638,6 @@ optif9(int nr, int n, double *x, fcn_p fcn, fcn_p d1fcn, d2fcn_p d2fcn,
  *	itncnt	    <--> iteration count
  */
 
-  cout << "optif9..xpls: " << xpls << endl;
-
   optdrv(nr, n, x, (fcn_p)fcn, (fcn_p)d1fcn, (d2fcn_p)d2fcn, state,
 	 typsiz, fscale, method, iexp, msg, ndigit, itnlim, iagflg,
 	 iahflg, dlt, gradtl, stepmx, steptl, xpls, fpls, gpls,

@@ -5,20 +5,6 @@ set(CMAKE_CXX_STANDARD 11)
 
 include_directories(include)
 include_directories(include/R_ext)
-
-#add_library(nlm_simple SHARED nlm_simple.cpp uncmin.cpp FunctionInfo.cpp nlm_tester.cpp nlm_tester.h)
-
-#SET(OBJS
-#        ${CMAKE_CURRENT_SOURCE_DIR}/exelib/dtrsl.o
-#        )
-#
-#SET_SOURCE_FILES_PROPERTIES(
-#        ${OBJS}
-#        PROPERTIES
-#        EXTERNAL_OBJECT true
-#        GENERATED true
-#)
-
 add_library(nlm_simple SHARED
         nlm_simple.cpp
         FunctionInfo.cpp
@@ -47,3 +33,16 @@ add_library(nlm_simple SHARED
 #target_link_libraries(nlm_tester "libRblas.so")
 #target_link_libraries(nlm_tester "libRlapack.so")
 
+
+#add_library(nlm_simple SHARED nlm_simple.cpp uncmin.cpp FunctionInfo.cpp nlm_tester.cpp nlm_tester.h)
+
+#SET(OBJS
+#        ${CMAKE_CURRENT_SOURCE_DIR}/exelib/dtrsl.o
+#        )
+#
+#SET_SOURCE_FILES_PROPERTIES(
+#        ${OBJS}
+#        PROPERTIES
+#        EXTERNAL_OBJECT true
+#        GENERATED true
+#)

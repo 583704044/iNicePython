@@ -12,7 +12,7 @@ extern "C"
 
 void optcode(int code);
 
-typedef double (*LossFunType)(const double *xOutput, unsigned long n);
+typedef double (*LossFunType)(const double *x, unsigned long n);
 
 double nlm_simple(LossFunType f, double* xInit,
         unsigned long n, double* xOutput, int* resultCode, int* iterCount,
