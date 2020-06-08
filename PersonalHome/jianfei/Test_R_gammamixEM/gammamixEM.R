@@ -15,6 +15,7 @@ gammamixEM <-
     theta <- c(alpha, beta)
 
     k <- tmp$k
+
     iter <- 0
     mr <- 0
     diff <- epsilon + 1
@@ -192,7 +193,7 @@ gammamixEM <-
           cat("iteration =", iter, " log-lik diff =", diff, " log-lik =",
               new.obs.ll, "\n")
         }
-      }
+      } # else
     }
     if (iter == maxit) {
       cat("WARNING! NOT CONVERGENT!", "\n")

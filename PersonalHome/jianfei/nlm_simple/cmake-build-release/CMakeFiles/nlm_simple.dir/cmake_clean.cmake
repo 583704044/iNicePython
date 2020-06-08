@@ -1,8 +1,9 @@
 file(REMOVE_RECURSE
   "CMakeFiles/nlm_simple.dir/nlm_simple.cpp.o"
-  "CMakeFiles/nlm_simple.dir/uncmin.cpp.o"
   "CMakeFiles/nlm_simple.dir/FunctionInfo.cpp.o"
-  "CMakeFiles/nlm_simple.dir/nlm_tester.cpp.o"
+  "CMakeFiles/nlm_simple.dir/uncmin.cpp.o"
+  "CMakeFiles/nlm_simple.dir/fmax2.cpp.o"
+  "CMakeFiles/nlm_simple.dir/fmin2.cpp.o"
   "libnlm_simple.pdb"
   "libnlm_simple.so"
 )

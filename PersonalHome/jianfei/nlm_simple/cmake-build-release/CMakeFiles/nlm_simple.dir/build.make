@@ -70,22 +70,9 @@ CMakeFiles/nlm_simple.dir/nlm_simple.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/nlm_simple.dir/nlm_simple.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/nlm_simple.cpp -o CMakeFiles/nlm_simple.dir/nlm_simple.cpp.s
 
-CMakeFiles/nlm_simple.dir/uncmin.cpp.o: CMakeFiles/nlm_simple.dir/flags.make
-CMakeFiles/nlm_simple.dir/uncmin.cpp.o: ../uncmin.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/cmake-build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/nlm_simple.dir/uncmin.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/nlm_simple.dir/uncmin.cpp.o -c /home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/uncmin.cpp
-
-CMakeFiles/nlm_simple.dir/uncmin.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/nlm_simple.dir/uncmin.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/uncmin.cpp > CMakeFiles/nlm_simple.dir/uncmin.cpp.i
-
-CMakeFiles/nlm_simple.dir/uncmin.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/nlm_simple.dir/uncmin.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/uncmin.cpp -o CMakeFiles/nlm_simple.dir/uncmin.cpp.s
-
 CMakeFiles/nlm_simple.dir/FunctionInfo.cpp.o: CMakeFiles/nlm_simple.dir/flags.make
 CMakeFiles/nlm_simple.dir/FunctionInfo.cpp.o: ../FunctionInfo.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/cmake-build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/nlm_simple.dir/FunctionInfo.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/cmake-build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/nlm_simple.dir/FunctionInfo.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/nlm_simple.dir/FunctionInfo.cpp.o -c /home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/FunctionInfo.cpp
 
 CMakeFiles/nlm_simple.dir/FunctionInfo.cpp.i: cmake_force
@@ -96,36 +83,74 @@ CMakeFiles/nlm_simple.dir/FunctionInfo.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/nlm_simple.dir/FunctionInfo.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/FunctionInfo.cpp -o CMakeFiles/nlm_simple.dir/FunctionInfo.cpp.s
 
-CMakeFiles/nlm_simple.dir/nlm_tester.cpp.o: CMakeFiles/nlm_simple.dir/flags.make
-CMakeFiles/nlm_simple.dir/nlm_tester.cpp.o: ../nlm_tester.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/cmake-build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/nlm_simple.dir/nlm_tester.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/nlm_simple.dir/nlm_tester.cpp.o -c /home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/nlm_tester.cpp
+CMakeFiles/nlm_simple.dir/uncmin.cpp.o: CMakeFiles/nlm_simple.dir/flags.make
+CMakeFiles/nlm_simple.dir/uncmin.cpp.o: ../uncmin.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/cmake-build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/nlm_simple.dir/uncmin.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/nlm_simple.dir/uncmin.cpp.o -c /home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/uncmin.cpp
 
-CMakeFiles/nlm_simple.dir/nlm_tester.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/nlm_simple.dir/nlm_tester.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/nlm_tester.cpp > CMakeFiles/nlm_simple.dir/nlm_tester.cpp.i
+CMakeFiles/nlm_simple.dir/uncmin.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/nlm_simple.dir/uncmin.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/uncmin.cpp > CMakeFiles/nlm_simple.dir/uncmin.cpp.i
 
-CMakeFiles/nlm_simple.dir/nlm_tester.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/nlm_simple.dir/nlm_tester.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/nlm_tester.cpp -o CMakeFiles/nlm_simple.dir/nlm_tester.cpp.s
+CMakeFiles/nlm_simple.dir/uncmin.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/nlm_simple.dir/uncmin.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/uncmin.cpp -o CMakeFiles/nlm_simple.dir/uncmin.cpp.s
+
+CMakeFiles/nlm_simple.dir/fmax2.cpp.o: CMakeFiles/nlm_simple.dir/flags.make
+CMakeFiles/nlm_simple.dir/fmax2.cpp.o: ../fmax2.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/cmake-build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/nlm_simple.dir/fmax2.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/nlm_simple.dir/fmax2.cpp.o -c /home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/fmax2.cpp
+
+CMakeFiles/nlm_simple.dir/fmax2.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/nlm_simple.dir/fmax2.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/fmax2.cpp > CMakeFiles/nlm_simple.dir/fmax2.cpp.i
+
+CMakeFiles/nlm_simple.dir/fmax2.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/nlm_simple.dir/fmax2.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/fmax2.cpp -o CMakeFiles/nlm_simple.dir/fmax2.cpp.s
+
+CMakeFiles/nlm_simple.dir/fmin2.cpp.o: CMakeFiles/nlm_simple.dir/flags.make
+CMakeFiles/nlm_simple.dir/fmin2.cpp.o: ../fmin2.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/cmake-build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/nlm_simple.dir/fmin2.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/nlm_simple.dir/fmin2.cpp.o -c /home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/fmin2.cpp
+
+CMakeFiles/nlm_simple.dir/fmin2.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/nlm_simple.dir/fmin2.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/fmin2.cpp > CMakeFiles/nlm_simple.dir/fmin2.cpp.i
+
+CMakeFiles/nlm_simple.dir/fmin2.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/nlm_simple.dir/fmin2.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/fmin2.cpp -o CMakeFiles/nlm_simple.dir/fmin2.cpp.s
 
 # Object files for target nlm_simple
 nlm_simple_OBJECTS = \
 "CMakeFiles/nlm_simple.dir/nlm_simple.cpp.o" \
-"CMakeFiles/nlm_simple.dir/uncmin.cpp.o" \
 "CMakeFiles/nlm_simple.dir/FunctionInfo.cpp.o" \
-"CMakeFiles/nlm_simple.dir/nlm_tester.cpp.o"
+"CMakeFiles/nlm_simple.dir/uncmin.cpp.o" \
+"CMakeFiles/nlm_simple.dir/fmax2.cpp.o" \
+"CMakeFiles/nlm_simple.dir/fmin2.cpp.o"
 
 # External object files for target nlm_simple
-nlm_simple_EXTERNAL_OBJECTS =
+nlm_simple_EXTERNAL_OBJECTS = \
+"/home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/sharedlib/dtrsl.o" \
+"/home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/sharedlib/ddot.o" \
+"/home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/sharedlib/dscal.o" \
+"/home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/sharedlib/dnrm2.o" \
+"/home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/sharedlib/daxpy.o"
 
 libnlm_simple.so: CMakeFiles/nlm_simple.dir/nlm_simple.cpp.o
-libnlm_simple.so: CMakeFiles/nlm_simple.dir/uncmin.cpp.o
 libnlm_simple.so: CMakeFiles/nlm_simple.dir/FunctionInfo.cpp.o
-libnlm_simple.so: CMakeFiles/nlm_simple.dir/nlm_tester.cpp.o
+libnlm_simple.so: CMakeFiles/nlm_simple.dir/uncmin.cpp.o
+libnlm_simple.so: CMakeFiles/nlm_simple.dir/fmax2.cpp.o
+libnlm_simple.so: CMakeFiles/nlm_simple.dir/fmin2.cpp.o
+libnlm_simple.so: ../sharedlib/dtrsl.o
+libnlm_simple.so: ../sharedlib/ddot.o
+libnlm_simple.so: ../sharedlib/dscal.o
+libnlm_simple.so: ../sharedlib/dnrm2.o
+libnlm_simple.so: ../sharedlib/daxpy.o
 libnlm_simple.so: CMakeFiles/nlm_simple.dir/build.make
 libnlm_simple.so: CMakeFiles/nlm_simple.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/cmake-build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX shared library libnlm_simple.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/jianfei/XPshared/iNicePython/PersonalHome/jianfei/nlm_simple/cmake-build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX shared library libnlm_simple.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/nlm_simple.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

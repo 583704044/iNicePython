@@ -46,5 +46,5 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/nlm_tester.dir/DependInfo.cmake"
+  "CMakeFiles/nlm_simple.dir/DependInfo.cmake"
   )
