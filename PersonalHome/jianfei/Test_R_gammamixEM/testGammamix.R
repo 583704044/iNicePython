@@ -11,8 +11,12 @@ cat('---------------- x is dim=', dim(x), 'nrow=', NROW(x), 'ncol=', NCOL(x), "\
 # function(x, lambda = NULL, alpha = NULL, beta = NULL, k = 2,
 # epsilon = 1e-08, maxit = 1000, maxrestarts = 20, verb = FALSE) {
 out <- gammamixEM(x, lambda = c(1, 1, 1) / 3, verb = TRUE, maxrestarts = 30)
+cat('---------------- x...lambda,gamma.pars' )
 print(out$lambda)
 print(out$gamma.pars)
+print(out$loglik)
+print(out$posterior)
+print(out$all.loglik)
 # a = list(x = x, lambda = lambda, gamma.pars = theta,
 # loglik = new.obs.ll, posterior = z,
 # all.loglik = ll, ft = "gammamixEM")
