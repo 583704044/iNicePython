@@ -22,14 +22,15 @@ class TestMixedGamma:
         x = np.asarray(x)
         x = x.reshape(-1)
 
-        print('xVec: ', x)
+        # print('xVec: ', x)
         # out <- gammamixEM(x, lambda = c(1, 1, 1) / 3, verb = TRUE, maxrestarts = 30)
 
         pai = np.ones(len(shape), dtype=np.float64)
         pai = pai/np.sum(pai)
 
         mg = MixedGamma(maxRestarts=30, verb=True)
-        r = mg.estimateResult(x, pai= pai, k=3)
+        # r = mg.estimateResult(x, pai= pai, k=3)
+        r = mg.estimateResult(x, k=3)
 
         r.display()
         # print('r.pai: ', r.pai)

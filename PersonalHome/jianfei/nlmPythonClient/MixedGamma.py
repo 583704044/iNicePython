@@ -52,8 +52,8 @@ class MixedGamma:
         x_sort = np.sort(self.xVec)
 
         print('DEB: ind: ', ind)
-        print('x_sort: ', x_sort)
-        print('x_sort[0:ind[0] + 1]: ', x_sort[0:ind[0] + 1])
+        # print('x_sort: ', x_sort)
+        # print('x_sort[0:ind[0] + 1]: ', x_sort[0:ind[0] + 1])
 
         x_part = []
         x_part.append(x_sort[0:ind[0] + 1])  # get [0, ind[0]] first ind[0]+1 elements (201 elements)
@@ -63,7 +63,7 @@ class MixedGamma:
         Ex = np.zeros(shape=(self.k,))
         Ex2 = np.zeros(shape=(self.k,))
         for i, p in enumerate(x_part):
-            print('DEB:...x_part_i=', i, p)
+            # print('DEB:...x_part_i=', i, p)
             Ex[i] = np.mean(p)  # 1.948985=mean[0, 200]  30.556443=mean[199,399] 325.343651
             Ex2[i] = np.mean(p ** 2)
 
@@ -104,11 +104,11 @@ class MixedGamma:
             # print('xVec: ', self.xVec)
             print('shape: ', shape[i])
             print('scale: ', scale[i])
-            print('gamma.pdf: i=', i, pdfBuffer[:, i])
+            # print('gamma.pdf: i=', i, pdfBuffer[:, i])
 
         pdfBuffer *= pai  # weighted prob. density values: lambda * pdfBuffer
 
-        print('DEB..._update_pdfBuffer...', pdfBuffer)
+        # print('DEB..._update_pdfBuffer...', pdfBuffer)
 
     def _sumLogLik(self, pai, shape, scale):
         # return a scalar
@@ -129,7 +129,13 @@ class MixedGamma:
         self._update_pdfBuffer(self.pdfBuffer, self.pai, shape, scale)
 
         print('\t\t\t_lossFun..np.log..')
-        np.log(self.pdfBuffer, out=self.pdfBuffer)
+
+        try:
+            np.log(self.pdfBuffer, out=self.pdfBuffer)
+        except Exception as e:
+            print('MixedGamma catch np.log..exception: ', e)
+
+
         print('\t\t\t_lossFun..np.log..end')
 
         self.pdfBuffer *= self.zBuffer

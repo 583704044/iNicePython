@@ -3,7 +3,14 @@ set.seed(100)
 x <- c(rgamma(200, shape = 0.2, scale = 14), 
        rgamma(200, shape = 32, scale = 10), 
        rgamma(200, shape = 5, scale = 6))
-out <- gammamixEM(x, lambda = c(1, 1, 1)/3, verb = TRUE)
+
+# out <- gammamixEM(x, lambda = c(1, 1, 1)/3, verb = TRUE)
+
+out <- gammamixEM(x, k=3, verb = TRUE)
+
+print(warnings())
+
+cat("..............................")
 print(out$lambda)
 print(out$gamma.pars)
 for ( p in out$gamma.pars) {

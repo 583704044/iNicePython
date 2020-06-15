@@ -5,9 +5,9 @@ gammamixEM <-
     tmp <- gammamix.init(x = x, lambda = lambda, alpha = alpha, beta = beta, k = k)
     lambda <- tmp$lambda
     # Debug> lambda
+    beta <- tmp$beta
     #[1] 0.3333333 0.3333333 0.3333333
     alpha <- tmp$alpha
-    beta <- tmp$beta
     # Debug> alpha
     #[1]  0.3571404  6.1872099 26.8053743
     #Debug> beta
@@ -150,8 +150,11 @@ gammamixEM <-
       #Debug> mean(yjfc)
       #[1] 0.3413408
 
-      out = try(suppressWarnings(nlm(gamma.ll, p = theta, lambda = lambda.hat, k = k, z = z)),
-                silent = TRUE)
+      # out = try(suppressWarnings(nlm(gamma.ll, p = theta, lambda = lambda.hat, k = k, z = z)),
+      #            silent = FALSE)
+      
+      out = nlm(gamma.ll, p = theta, lambda = lambda.hat, k = k, z = z)
+      
       # gamma.ll: sum(600-by-3)=1, theta: k+k, lambda.hat: 1-by-3, k: 3, z: 600-by-3
       # gamma.ll <- function(theta, z, lambda, k) -sum(z * log(dens(lambda, theta, k)))
       # element-wise product between z and log(dens(lambda, theta, k)), result is 600-by-3
@@ -159,6 +162,7 @@ gammamixEM <-
         # The value of the expression if expr is evaluated without error,
         # but an invisible object of class "try-error" containing the error message,
         # and the error condition as the "condition" attribute, if it fails.
+        
         cat("Note: Choosing new starting values.", "\n")
         if (mr == maxrestarts) stop(paste("Try different number of components?", "\n"))
         mr <- mr + 1
@@ -205,5 +209,7 @@ gammamixEM <-
     a = list(x = x, lambda = lambda, gamma.pars = theta, loglik = new.obs.ll,
              posterior = z, all.loglik = ll, ft = "gammamixEM")
     class(a) = "mixEM"
+    
+    warnings()   # print all warnings()
     a
   }	
