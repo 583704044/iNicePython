@@ -106,17 +106,27 @@ class MixedGamma:
         # = gamma.pdf(x_i, shape_j, scale_j) pai_j
         for j in range(self.k):
             outBuffer[:, j] = gamma.pdf(self.xVec, a=shape[j], scale=scale[j])  # likelihood
+            print('outBuff.zeros: ', outBuffer[outBuffer==0])
+
+        # remove zeros
+        # outBuffer[outBuffer< sys.float_info.min] = sys.float_info.min
 
         outBuffer *= pai  # product rule of probability, i.e. un-normalized posterior probability
+        print('pai * outBuff.zeros: ', np.argwhere(outBuffer == 0))
 
     def _update_zBuffer_pai(self):
         # zBuffer: n-by-k, the latent membership prob for each i-th data, i in [0,n)
 
+        print('_zBuffer_pai.zBuff.nan: ', np.argwhere(np.isnan(self.pdfBuffer)))
         self._positiveInference(self.pai, self.shape, self.scale, self.zBuffer)
+
+        print('_zBuffer_pai.posInf..zBuff.nan: ', np.argwhere(np.isnan(self.pdfBuffer)))
 
         # normalize z_Buffer
         self.zBuffer.sum(axis=1, out=self.nVecBuffer)
         self.zBuffer /= self.nVecBuffer[:, np.newaxis]  # z is 600-by-3
+
+        print('_zBuffer_pai.divide/sum..zBuff.nan: ', np.argwhere(np.isnan(self.pdfBuffer)))
 
         # pai_hat_j = 1/n sum_i..n p(Z_i =j| x_i, theta)
         self.pai = np.mean(self.zBuffer, axis=0)        # pai_hat is 1-by-3
@@ -131,7 +141,6 @@ class MixedGamma:
             # even it accesses bad solution during the single solving process.
             self.xSS = xSS
             return True
-        self.ssErrorFree = False
         return False
 
 
@@ -139,9 +148,10 @@ class MixedGamma:
         # gamma.ll < - function(theta, z, lambda , k) - sum(z * log(dens(lambda , theta, k)))
         # x is theta=(shape, scale)
 
+        print('\t\t\t\t\tDEB--------------> xSS=', xSS)
+
         if not (np.isfinite(xSS).all() and (xSS > 0).all()):
             print('MixedGamma..WARNING..found invalid xSS: ', xSS)
-            # self.ssErrorFree = False
             return sys.float_info.max
 
         shape = xSS[0: self.k]
@@ -152,14 +162,25 @@ class MixedGamma:
         # compute loss for the searching point xSS
         self._positiveInference(self.pai, shape, scale, self.pdfBuffer)
 
-        print('pdfBuff: ', self.pdfBuffer)
+        print('pdfBuff.zeros: ', np.argwhere(self.pdfBuffer==0))
+        print('pdfBuff.nan: ', np.argwhere(np.isnan(self.pdfBuffer)))
+
         print('DEB...<------------- posiInfi...')
 
         np.log(self.pdfBuffer, out=self.pdfBuffer)
 
-        print('================> DEB...end...np.log(posiInfi)...')
+        print('================> DEB...end...np.log(posiInfi)...', self.pdfBuffer)
+        nanw = np.argwhere(np.isinf(self.pdfBuffer))
+        print('log(pdfBuff).inf_ind: ', nanw)
+        if nanw.shape[0] != 0:
+            print('log(pdfBuff).inf_ele: ', self.pdfBuffer[nanw[0,0], nanw[0,1]])
+            print('xVec.ele: ', self.xVec[nanw[0,0]])
+        print('zBuff.nan: ', np.argwhere(np.isnan(self.zBuffer)))
 
         self.pdfBuffer *= self.zBuffer
+
+        print('==+=+===+===+==> DEB...end...pdfBuff*zBuff...', self.pdfBuffer)
+        print('(pdfB * zBuff).nan: ', np.argwhere(np.isnan(self.pdfBuffer)))
 
         res = -1.0 * np.sum(self.pdfBuffer)
 
@@ -199,7 +220,6 @@ class MixedGamma:
         self.shape = shape
         self.scale = scale
         self.xSS = None   # np.concatenate((self.shape, self.scale))
-        self.ssErrorFree = True     # since we have do _checkInitInvoke
 
         self.pdfBuffer = np.zeros(shape=(self.n, self.k), dtype=np.float64)  # pdfBuffer is n-by-k
         self.zBuffer = np.zeros(shape=(self.n, self.k), dtype=np.float64)    # zBuffer for computing z
@@ -237,7 +257,7 @@ class MixedGamma:
             xSS = self.minimizer.getXSolution()
             xOK = self._update_shape_scale(xSS)
 
-            if xOK and self.ssErrorFree and retValue is not None:
+            if xOK and retValue is not None:
 
                 new_obs_ll = self._sumLogLik()  # self.pdfBuffer is right
                 diff = new_obs_ll - old_obs_ll
