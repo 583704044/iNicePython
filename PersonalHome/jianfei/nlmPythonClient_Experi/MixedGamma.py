@@ -1,5 +1,6 @@
 # Adpated from mixtools1.1.0 by jianfei since 2020.6.8
 
+import sys
 import numpy as np
 from scipy.stats import gamma
 
@@ -86,72 +87,109 @@ class MixedGamma:
         Ex_2 = Ex ** 2
         Varx = Ex2 - Ex_2
 
-        if not self.shape:
+        assert (Varx > 0).all(), 'Varx must > 0'
+
+        if self.shape is None:
             self.shape = Ex ** 2 / Varx  # 0.3571404  6.1872099 26.8053743
 
-        if not self.scale:
+        if self.scale is None:
             self.scale = Varx / Ex  # 5.457196  4.938647 12.137255
 
         self.xSS = np.concatenate((self.shape, self.scale))
 
-    def _update_pdfBuffer(self, pdfBuffer, pai, shape, scale):
+        # update self.pdfBuffer
+        self._positiveInference(self.pai, self.shape, self.scale, self.pdfBuffer)
+
+    def _positiveInference(self, pai, shape, scale, outBuffer):
         # dens <- function(lambda, theta, k)
+        # outBuffer[i, j]= p(x_i | z_i = j) p(z_i = j)
+        # = gamma.pdf(x_i, shape_j, scale_j) pai_j
+        for j in range(self.k):
+            outBuffer[:, j] = gamma.pdf(self.xVec, a=shape[j], scale=scale[j])  # likelihood
 
-        for i in range(self.k):
-            pdfBuffer[:, i] = gamma.pdf(self.xVec,
-                                             a=shape[i],
-                                             scale=scale[i])
-            # print('xVec: ', self.xVec)
-            print('shape: ', shape[i])
-            print('scale: ', scale[i])
-            # print('gamma.pdf: i=', i, pdfBuffer[:, i])
+        outBuffer *= pai  # product rule of probability, i.e. un-normalized posterior probability
 
-        pdfBuffer *= pai  # weighted prob. density values: lambda * pdfBuffer
+    def _update_zBuffer_pai(self):
+        # zBuffer: n-by-k, the latent membership prob for each i-th data, i in [0,n)
 
-        # print('DEB..._update_pdfBuffer...', pdfBuffer)
+        self._positiveInference(self.pai, self.shape, self.scale, self.zBuffer)
 
-    def _sumLogLik(self, pai, shape, scale):
+        # normalize z_Buffer
+        self.zBuffer.sum(axis=1, out=self.nVecBuffer)
+        self.zBuffer /= self.nVecBuffer[:, np.newaxis]  # z is 600-by-3
+
+        # pai_hat_j = 1/n sum_i..n p(Z_i =j| x_i, theta)
+        self.pai = np.mean(self.zBuffer, axis=0)        # pai_hat is 1-by-3
+
+    def _update_shape_scale(self, xSS):
+
+        if np.isfinite(xSS).all() and (xSS > 0).all():
+            self.shape = xSS[0: self.k]
+            self.scale = xSS[self.k: self.k + self.k]
+            # DONT SET self.ssErrorFree = True,
+            # because the nlm_simple may return valid solution,
+            # even it accesses bad solution during the single solving process.
+            self.xSS = xSS
+            return True
+        self.ssErrorFree = False
+        return False
+
+
+    def _lossFun(self, xSS):
+        # gamma.ll < - function(theta, z, lambda , k) - sum(z * log(dens(lambda , theta, k)))
+        # x is theta=(shape, scale)
+
+        if not (np.isfinite(xSS).all() and (xSS > 0).all()):
+            print('MixedGamma..WARNING..found invalid xSS: ', xSS)
+            # self.ssErrorFree = False
+            return sys.float_info.max
+
+        shape = xSS[0: self.k]
+        scale = xSS[self.k: self.k + self.k]
+
+        print('DEB--------------> posiInfi...')
+        # given new zBuffer=> new pai,
+        # compute loss for the searching point xSS
+        self._positiveInference(self.pai, shape, scale, self.pdfBuffer)
+
+        print('pdfBuff: ', self.pdfBuffer)
+        print('DEB...<------------- posiInfi...')
+
+        np.log(self.pdfBuffer, out=self.pdfBuffer)
+
+        print('================> DEB...end...np.log(posiInfi)...')
+
+        self.pdfBuffer *= self.zBuffer
+
+        res = -1.0 * np.sum(self.pdfBuffer)
+
+        print('\t\t\t\t*********** loss: ', res)
+
+        return res
+
+    def _sumLogLik(self):
         # return a scalar
         # old.obs.ll <- sum(log(apply(dens(lambda, theta, k), 1, sum)))
-        self._update_pdfBuffer(self.pdfBuffer, pai, shape, scale)
+
+        # already calcuated in self._lossFun, self._estInitParameters
+        self._positiveInference(self.pai, self.shape, self.scale, self.pdfBuffer)
+
         np.sum(self.pdfBuffer, axis=1, out=self.nVecBuffer)
         np.log(self.nVecBuffer, out=self.nVecBuffer)
 
         return np.sum(self.nVecBuffer)
 
-    def _lossFun(self, xSS):
-        # gamma.ll < - function(theta, z, lambda , k) - sum(z * log(dens(lambda , theta, k)))
-        # x is theta,
-        shape = xSS[0: self.k]
-        scale = xSS[self.k: self.k + self.k]
+    def _checkInitCall(self, xVec, pai, shape, scale, k):
+        assert (xVec > 0).all() and np.isfinite(xVec).all()
+        assert pai is None or (pai > 0).all()
+        assert shape is None or (shape > 0).all()
+        assert scale is None or (scale > 0).all()
+        assert k > 0
 
-        # for new pai, z, searching xSS
-        self._update_pdfBuffer(self.pdfBuffer, self.pai, shape, scale)
-
-        print('\t\t\t_lossFun..np.log..')
-
-        try:
-            np.log(self.pdfBuffer, out=self.pdfBuffer)
-        except Exception as e:
-            print('MixedGamma catch np.log..exception: ', e)
-
-
-        print('\t\t\t_lossFun..np.log..end')
-
-        self.pdfBuffer *= self.zBuffer
-
-        return -1.0 * np.sum(self.pdfBuffer)
-
-    def _update_pai_z(self):
-
-        self._update_pdfBuffer(self.zBuffer, self.pai, self.shape, self.scale)
-
-        weight = self.zBuffer.sum(axis=1)
-
-        self.zBuffer /= weight[:, np.newaxis]       # z is 600-by-3
-        self.pai = np.mean(self.zBuffer, axis=0)    # pai_hat is 1-by-3
 
     def estimateResult(self, xVec: np.ndarray, pai=None, shape=None, scale=None, k=2):
+
+        self._checkInitCall(xVec, pai, shape, scale, k)
 
         self.xVec = xVec  # 1-dimension data supposed to follow a mixture of k gamma distributions
         self.n = self.xVec.shape[0]
@@ -161,10 +199,11 @@ class MixedGamma:
         self.shape = shape
         self.scale = scale
         self.xSS = None   # np.concatenate((self.shape, self.scale))
+        self.ssErrorFree = True     # since we have do _checkInitInvoke
 
         self.pdfBuffer = np.zeros(shape=(self.n, self.k), dtype=np.float64)  # pdfBuffer is n-by-k
-        self.zBuffer = np.zeros(shape=(self.n, self.k), dtype=np.float64)  # zBuffer for computing z
-        self.nVecBuffer = np.zeros(shape=(self.n,), dtype=np.float64)
+        self.zBuffer = np.zeros(shape=(self.n, self.k), dtype=np.float64)    # zBuffer for computing z
+        self.nVecBuffer = np.zeros(shape=(self.n,), dtype=np.float64)        # used in computing z, sumLogLik
 
         # initize (lambda = lambda, alpha = alpha, beta = beta, k = k)
         self._estInitParameters()
@@ -172,11 +211,11 @@ class MixedGamma:
         print('after...estInitParameters...')
 
         iter = 0
-        mr = 0
+        mr = 0                      # number of max restarts
         diff = self.epsilon + 1
 
         # old.obs.ll <- sum(log(apply(dens(lambda, theta, k), 1, sum)))
-        old_obs_ll = self._sumLogLik(self.pai, self.shape, self.scale)
+        old_obs_ll = self._sumLogLik()
 
         print('DEB...old_obs_ll: ', old_obs_ll)
 
@@ -185,9 +224,9 @@ class MixedGamma:
 
         while diff > self.epsilon and iter < self.maxIter:
 
-            # update z and pai(hat) to obtain a new self._lossFun
+            # update membership (z and pai(hat)) to obtain a new self._lossFun
             # self.pai is pai_hat
-            self._update_pai_z()
+            self._update_zBuffer_pai()
 
             print('DEB...after _update_pai_z')
 
@@ -195,13 +234,12 @@ class MixedGamma:
             # out = try(suppressWarnings(nlm(gamma.ll, p = theta~xSS, lambda = lambda.hat, k = k, z = z)),
 
             print('DEB...after self.minimizer...retValue: ', retValue)
+            xSS = self.minimizer.getXSolution()
+            xOK = self._update_shape_scale(xSS)
 
-            if retValue is not None:
-                self.xSS = self.minimizer.getXSolution()
-                self.shape = self.xSS[0: self.k]
-                self.scale = self.xSS[self.k: self.k + self.k]
+            if xOK and self.ssErrorFree and retValue is not None:
 
-                new_obs_ll = self._sumLogLik(self.pai, self.shape, self.scale)
+                new_obs_ll = self._sumLogLik()  # self.pdfBuffer is right
                 diff = new_obs_ll - old_obs_ll
 
                 old_obs_ll = new_obs_ll
@@ -213,7 +251,7 @@ class MixedGamma:
                           'log-lik = ', new_obs_ll)
                 continue
 
-            # retValue is None:
+            # !xOK or !self.ssErrorFree or retValue None
             print('Note: Choosing new starting values.')
             if mr >= self.maxRestarts:
                 print('FAILED: maxRestarts=', mr, ' is reached')
@@ -223,7 +261,7 @@ class MixedGamma:
             diff = self.epsilon + 1
 
             self._estInitParameters()
-            old_obs_ll = self._sumLogLik(self.pai, self.shape, self.scale)
+            old_obs_ll = self._sumLogLik()  # must be called after _estInitParameters
             ll = [old_obs_ll]
 
         # end of while

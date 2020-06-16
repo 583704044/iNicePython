@@ -29,8 +29,8 @@ class TestMixedGamma:
         pai = pai/np.sum(pai)
 
         mg = MixedGamma(maxRestarts=30, verb=True)
-        # r = mg.estimateResult(x, pai= pai, k=3)
-        r = mg.estimateResult(x, k=3)
+        r = mg.estimateResult(x, pai= pai, k=3)
+        # r = mg.estimateResult(x, k=3)
 
         r.display()
         # print('r.pai: ', r.pai)
