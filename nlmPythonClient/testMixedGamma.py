@@ -22,7 +22,7 @@ class TestMixedGamma:
         x = np.asarray(x)
         x = x.reshape(-1)
 
-        print('xVec: ', x)
+        # print('xVec: ', x)
         # out <- gammamixEM(x, lambda = c(1, 1, 1) / 3, verb = TRUE, maxrestarts = 30)
 
         pai = np.ones(len(shape), dtype=np.float64)

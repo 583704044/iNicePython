@@ -2,9 +2,9 @@
 
 import numpy as np
 from scipy.stats import gamma
-
 from nlmMinimizer import nlmMinimizer
 
+import sys
 
 class MixedGammaResult:
 
@@ -52,8 +52,8 @@ class MixedGamma:
         x_sort = np.sort(self.xVec)
 
         print('DEB: ind: ', ind)
-        print('x_sort: ', x_sort)
-        print('x_sort[0:ind[0] + 1]: ', x_sort[0:ind[0] + 1])
+        # print('x_sort: ', x_sort)
+        # print('x_sort[0:ind[0] + 1]: ', x_sort[0:ind[0] + 1])
 
         x_part = []
         x_part.append(x_sort[0:ind[0] + 1])  # get [0, ind[0]] first ind[0]+1 elements (201 elements)
@@ -63,7 +63,7 @@ class MixedGamma:
         Ex = np.zeros(shape=(self.k,))
         Ex2 = np.zeros(shape=(self.k,))
         for i, p in enumerate(x_part):
-            print('DEB:...x_part_i=', i, p)
+            # print('DEB:...x_part_i=', i, p)
             Ex[i] = np.mean(p)  # 1.948985=mean[0, 200]  30.556443=mean[199,399] 325.343651
             Ex2[i] = np.mean(p ** 2)
 
@@ -102,13 +102,13 @@ class MixedGamma:
                                              a=shape[i],
                                              scale=scale[i])
             # print('xVec: ', self.xVec)
-            print('shape: ', shape[i])
-            print('scale: ', scale[i])
-            print('gamma.pdf: i=', i, pdfBuffer[:, i])
+            # print('shape: ', shape[i])
+            # print('scale: ', scale[i])
+            # print('gamma.pdf: i=', i, pdfBuffer[:, i])
 
         pdfBuffer *= pai  # weighted prob. density values: lambda * pdfBuffer
 
-        print('DEB..._update_pdfBuffer...', pdfBuffer)
+        # print('DEB..._update_pdfBuffer...', pdfBuffer)
 
     def _sumLogLik(self, pai, shape, scale):
         # return a scalar
@@ -122,19 +122,46 @@ class MixedGamma:
     def _lossFun(self, xSS):
         # gamma.ll < - function(theta, z, lambda , k) - sum(z * log(dens(lambda , theta, k)))
         # x is theta,
+
+        print('\t\t\t\t\tDEB--------------> xSS=', xSS)
+
+        if not (np.isfinite(xSS).all() and (xSS > 0).all()):
+            print('MixedGamma..WARNING..found invalid xSS: ', xSS)
+            return sys.float_info.max
+
         shape = xSS[0: self.k]
         scale = xSS[self.k: self.k + self.k]
 
+        print('DEB--------------> posiInfi...')
         # for new pai, z, searching xSS
         self._update_pdfBuffer(self.pdfBuffer, self.pai, shape, scale)
 
-        print('\t\t\t_lossFun..np.log..')
+        print('pdfBuff.zeros_inds: ', np.argwhere(self.pdfBuffer==0))
+        print('pdfBuff.nan: ', np.argwhere(np.isnan(self.pdfBuffer)))
+        print('DEB...<------------- posiInfi...')
+
+        # print('\t\t\t_lossFun..np.log..')
         np.log(self.pdfBuffer, out=self.pdfBuffer)
-        print('\t\t\t_lossFun..np.log..end')
+
+        print('================> DEB...end...np.log(posiInfi)...')
+        nanw = np.argwhere(np.isinf(self.pdfBuffer))    # pdfBuffer: n-by-k
+        # print('log(pdfBuff).inf_ind: ', nanw)
+        if nanw.shape[0] != 0:
+            print('log(pdfBuff).nan inds: ', nanw)
+            print('log(pdfBuff)[0,0].inf_ele: ', self.pdfBuffer[nanw[0,0], nanw[0,1]])
+            print('xVec.ele: ', self.xVec[nanw[0,0]])
+        print('zBuff.nan: ', np.argwhere(np.isnan(self.zBuffer)))
 
         self.pdfBuffer *= self.zBuffer
 
-        return -1.0 * np.sum(self.pdfBuffer)
+        print('==+=+===+===+==> DEB...end...pdfBuff*zBuff...')
+        print('(pdfB * zBuff).nan_inds: ', np.argwhere(np.isnan(self.pdfBuffer)))
+
+        res = -1.0 * np.sum(self.pdfBuffer)
+
+        print('\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t*********** loss: ', res)
+
+        return res
 
     def _update_pai_z(self):
 

@@ -49,7 +49,7 @@ double dpois_raw(double x, double lambda, int give_log)
 	if (!R_FINITE(x)) // lambda < x = +Inf
 	    return R_D__0;
 	// else
-	return(R_D_exp(-lambda + x*log(lambda) -lgammafn(x+1)));
+	return( R_D_exp(-lambda + x*log(lambda) -lgammafn(x+1)) );
     }
     return(R_D_fexp( M_2PI*x, -stirlerr(x)-bd0(x,lambda) ));
 }
