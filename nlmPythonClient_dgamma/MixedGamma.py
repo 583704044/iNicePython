@@ -106,13 +106,13 @@ class MixedGamma:
         # outBuffer[i, j]= p(x_i | z_i = j) p(z_i = j)
         # = gamma.pdf(x_i, shape_j, scale_j) pai_j
         for j in range(self.k):
-            outBuffer[:, j] = gamma.pdf(self.xVec, a=shape[j], scale=scale[j])  # likelihood
+            # outBuffer[:, j] = gamma.pdf(self.xVec, a=shape[j], scale=scale[j])  # likelihood
             # xIn, shape, scale, pdfOut= None, give_log = False):
             # print('xVec: ', self.xVec)
             # print('shape: ', shape)
             # print('scale: ', scale)
 
-            # outBuffer[:, j] = self.gammaPdf(self.xVec, shape[j], scale[j])
+            outBuffer[:, j] = self.gammaPdf(self.xVec, shape[j], scale[j])
             # print('outBuff: ', outBuffer[:, j])
 
         # remove zeros
